@@ -5,6 +5,8 @@ import { ArrowLeft, Clock, Calendar, ChevronRight, Share2, Bookmark, Heart, Arro
 import { blogPosts } from "../data/content";
 import BlogCard from "../components/BlogCard";
 import ReadingProgress from "../components/ReadingProgress";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
@@ -87,40 +89,158 @@ export default function BlogPost() {
   };
 
   const renderContent = (content: string) => {
-    const blocks = content.split("\n\n");
-    return blocks.map((block, i) => {
-      if (block.startsWith("## ")) {
-        const text = block.replace("## ", "");
-        const id = text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-        return (
-          <h2
-            key={i}
-            id={id}
-            className="heading-editorial text-2xl md:text-3xl font-bold text-slate-900 mt-14 mb-5 scroll-mt-32"
-          >
-            {text}
-          </h2>
-        );
-      }
-      if (block.startsWith("- ")) {
-        const items = block.split("\n").filter((l) => l.startsWith("- "));
-        return (
-          <ul key={i} className="my-7 space-y-3">
-            {items.map((item, j) => (
-              <li key={j} className="flex items-start gap-3 text-lg text-slate-700 leading-relaxed">
+    return (
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          // ── Headings ─────────────────────────────────────────
+          h1: ({ children }) => (
+            <h1 className="heading-editorial text-3xl md:text-4xl font-bold text-slate-900 mt-16 mb-6 scroll-mt-32">
+              {children}
+            </h1>
+          ),
+          h2: ({ children }) => {
+            const text = String(children);
+            const id = text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+            return (
+              <h2
+                id={id}
+                className="heading-editorial text-2xl md:text-3xl font-bold text-slate-900 mt-14 mb-5 scroll-mt-32"
+              >
+                {children}
+              </h2>
+            );
+          },
+          h3: ({ children }) => (
+            <h3 className="heading-editorial text-xl md:text-2xl font-bold text-slate-900 mt-10 mb-4 scroll-mt-32">
+              {children}
+            </h3>
+          ),
+          h4: ({ children }) => (
+            <h4 className="heading-editorial text-lg md:text-xl font-semibold text-slate-900 mt-8 mb-3">
+              {children}
+            </h4>
+          ),
+
+          // ── Paragraphs ───────────────────────────────────────
+          p: ({ children }) => (
+            <p className="text-lg md:text-[19px] text-slate-700 leading-[1.85] mb-6">
+              {children}
+            </p>
+          ),
+
+          // ── Bold + Italic ────────────────────────────────────
+          strong: ({ children }) => (
+            <strong className="font-bold text-slate-900">{children}</strong>
+          ),
+          em: ({ children }) => (
+            <em className="italic text-slate-800">{children}</em>
+          ),
+
+          // ── Links ────────────────────────────────────────────
+          a: ({ href, children }) => (
+            <a
+              href={href}
+              target={href?.startsWith("http") ? "_blank" : undefined}
+              rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
+              className="text-indigo-600 hover:text-indigo-700 underline decoration-indigo-300 underline-offset-2 hover:decoration-indigo-500 transition-colors"
+            >
+              {children}
+            </a>
+          ),
+
+          // ── Lists ────────────────────────────────────────────
+          ul: ({ children }) => (
+            <ul className="my-7 space-y-3 list-none">{children}</ul>
+          ),
+          ol: ({ children }) => (
+            <ol className="my-7 space-y-3 list-decimal list-inside text-lg text-slate-700">
+              {children}
+            </ol>
+          ),
+          li: ({ children, ...props }) => {
+            // Check if it's part of an ordered list
+            const isOrdered = (props as any).ordered;
+            if (isOrdered) {
+              return <li className="text-lg text-slate-700 leading-relaxed pl-2">{children}</li>;
+            }
+            return (
+              <li className="flex items-start gap-3 text-lg text-slate-700 leading-relaxed">
                 <span className="shrink-0 mt-2.5 w-1.5 h-1.5 rounded-full bg-indigo-500" />
-                <span>{item.replace("- ", "")}</span>
+                <span>{children}</span>
               </li>
-            ))}
-          </ul>
-        );
-      }
-      return (
-        <p key={i} className="text-lg md:text-[19px] text-slate-700 leading-[1.85] mb-6">
-          {block}
-        </p>
-      );
-    });
+            );
+          },
+
+          // ── Code Blocks ──────────────────────────────────────
+          code: ({ node, className, children, ...props }: any) => {
+            // Detect inline vs block code
+            // Block code: has language-xxx className OR contains newlines
+            const text = String(children);
+            const isBlock = (className && className.startsWith("language-")) || text.includes("\n");
+
+            if (!isBlock) {
+              // Inline code: `code` style
+              return (
+                <code className="px-1.5 py-0.5 mx-0.5 text-[0.9em] font-mono bg-slate-100 text-rose-600 rounded border border-slate-200">
+                  {children}
+                </code>
+              );
+            }
+            // Block code — let <pre> wrapper handle the styling
+            return (
+              <code className="block text-slate-100 font-mono text-sm leading-relaxed" {...props}>
+                {children}
+              </code>
+            );
+          },
+          pre: ({ children }) => (
+            <pre className="my-7 p-5 bg-slate-900 text-slate-100 rounded-xl overflow-x-auto text-sm leading-relaxed font-mono shadow-lg ring-1 ring-slate-800">
+              {children}
+            </pre>
+          ),
+
+          // ── Blockquote ───────────────────────────────────────
+          blockquote: ({ children }) => (
+            <blockquote className="my-8 pl-6 py-2 border-l-4 border-indigo-500 bg-indigo-50/50 text-slate-700 italic text-lg">
+              {children}
+            </blockquote>
+          ),
+
+          // ── Tables ───────────────────────────────────────────
+          table: ({ children }) => (
+            <div className="my-8 overflow-x-auto rounded-xl ring-1 ring-slate-200 shadow-sm">
+              <table className="w-full text-left">{children}</table>
+            </div>
+          ),
+          thead: ({ children }) => (
+            <thead className="bg-slate-50 border-b border-slate-200">{children}</thead>
+          ),
+          tbody: ({ children }) => <tbody className="divide-y divide-slate-100">{children}</tbody>,
+          tr: ({ children }) => <tr className="hover:bg-slate-50/50 transition-colors">{children}</tr>,
+          th: ({ children }) => (
+            <th className="px-5 py-3 text-sm font-semibold text-slate-900">{children}</th>
+          ),
+          td: ({ children }) => (
+            <td className="px-5 py-3 text-sm text-slate-700">{children}</td>
+          ),
+
+          // ── Horizontal Rule ──────────────────────────────────
+          hr: () => <hr className="my-12 border-t-2 border-slate-100" />,
+
+          // ── Images ───────────────────────────────────────────
+          img: ({ src, alt }) => (
+            <img
+              src={src}
+              alt={alt}
+              className="my-8 rounded-xl ring-1 ring-slate-200 shadow-md w-full"
+            />
+          ),
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    );
   };
 
   const categoryStyles: Record<string, string> = {
