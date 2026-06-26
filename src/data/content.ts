@@ -16,6 +16,12 @@ export interface BlogPost {
 }
 
 export interface Project {
+  links?: {
+    github?: string;
+    pypi?: string;
+    install?: string;
+    demo?: string;
+  };
   id: string;
   title: string;
   description: string;
@@ -155,20 +161,29 @@ export const projects: Project[] = [
   {
     id: "3",
     title: "Oblivion",
-    description: "Local AI coding agent with voice persona — fully offline, zero dependency, powered by LiteLLM and cloud-aware reasoning.",
-    longDescription: "Oblivion is a fully local AI coding agent powered by Ollama and LiteLLM, featuring codebase-aware reasoning, semantic search, voice interaction, and autonomous developer tooling with zero dependency. It features a hybrid retrieval and execution framework combining AST-aware code parsing, SQLite FTS5, ChromaDB embeddings, workspace-safe file operations, multi-file code generation, and self-correcting workflows for reliable software development assistance.",
-    tech: ["Python", "Textual", "ChromaDB", "SQLite FTS5", "Ollama", "LiteLLM", "faster-whisper", "ElevenLabs"],
-    category: "AI · Developer Tools",
+    description: "Terminal AI coding agent with voice, RAG, 13 LLM backends, and a shell-based Meera persona. Open source on GitHub, published on PyPI.",
+    longDescription: "Oblivion is a terminal-based AI coding assistant powered by M.E.E.R.A. (Multi-modal Engineering and Reasoning Assistant) — a voice-enabled shell agent that lives inside your codebase, understands it semantically through AST-aware indexing, and helps you build software through natural conversation. Pip-installable from PyPI (`pip install oblivion-agent`), MIT licensed, and 100% self-hosted with zero telemetry. Combines hybrid symbol-aware retrieval (SQLite FTS5 + ChromaDB embeddings), 13 LLM backends across 7 providers with silent auto-fallback, 22 tool-driven actions with diff-approval gates, persistent per-project memory in `MEMORY.md`, voice input via Whisper + voice output via Edge TTS/ElevenLabs, and an MCP server exposing 10 read-only tools to Claude Desktop, Cursor, and Zed. v2.10.1 shipped after 11 minor releases — built solo on a 13GB Lenovo with no GPU.",
+    tech: ["Python 3.11+", "Textual TUI", "ChromaDB", "SQLite FTS5", "LiteLLM", "faster-whisper", "Edge TTS", "ElevenLabs", "MCP SDK", "OpenRouter", "Ollama"],
+    category: "AI · Developer Tools · Open Source",
     year: "2025",
-    status: "Active",
+    status: "Shipped on PyPI",
     color: "from-amber-500 via-orange-500 to-rose-500",
     features: [
-      "Fully local · zero cloud dependency",
-      "Codebase-aware reasoning with AST parsing",
-      "Voice persona and interaction",
-      "Self-correcting multi-file generation",
-      "Hybrid retrieval + execution engine",
+      "Published on PyPI as oblivion-agent v2.10.1",
+      "13 LLM backends across 7 providers with auto-fallback",
+      "22 tool actions + AST-aware semantic code search",
+      "Voice in/out via Whisper + Edge TTS / ElevenLabs",
+      "MCP server exposing 10 read-only tools to Claude Desktop",
+      "Persistent per-project memory (MEMORY.md)",
+      "Self-updating via in-app /update install",
+      "13 built-in knowledge packs (React, Django, FastAPI, ...)",
+      "MIT licensed, zero telemetry, fully self-hosted",
     ],
+    links: {
+      github: "https://github.com/Rohith-s-hub/Oblivion-agent",
+      pypi: "https://pypi.org/project/oblivion-agent/",
+      install: "pip install oblivion-agent",
+    },
   },
   {
     id: "4",
@@ -934,32 +949,282 @@ Built solo. Deployed in production. Designed for humans, not databases.
   {
     id: "3",
     slug: "oblivion-local-ai-coding-agent",
-    title: "Oblivion: Building a Local AI Coding Agent With Zero Cloud Dependency",
-    excerpt: "Why I built a fully local AI coding agent with voice persona, AST-aware retrieval, and self-correcting workflows — and why local-first is the future of developer tooling.",
-    content: `Cloud-based coding assistants are convenient. But they leak your codebase, hallucinate on private APIs, and cost a fortune at scale. I wanted something different: an agent that runs entirely on my laptop, understands my repo, and talks back.
+    title: "Oblivion: Building a Production-Grade Local AI Coding Agent — From Zero to PyPI",
+    excerpt: "Oblivion shipped on PyPI: a terminal-based AI coding agent that runs locally, supports voice, falls back across 13 LLM backends, and ships as an MCP server for Claude Desktop. Here is the complete architecture, what broke during the build, and why local-first is the only honest path for AI dev tooling.",
+    content: `> **TL;DR** — Oblivion is a terminal-based AI coding agent that runs locally, supports voice in/out, falls back across 13 LLM backends, and ships on PyPI as \`oblivion-agent\`. Built solo over 4 months on a 13GB Lenovo with no GPU. MIT licensed.
+>
+> 📦 **PyPI:** [pypi.org/project/oblivion-agent](https://pypi.org/project/oblivion-agent/)
+> 💻 **GitHub:** [github.com/Rohith-s-hub/Oblivion-agent](https://github.com/Rohith-s-hub/Oblivion-agent)
+> ⭐ **License:** MIT
+> 🐍 **Install:** \`pip install oblivion-agent\`
 
-## Meet Oblivion
+---
 
-Oblivion is a local-first AI coding agent powered by Ollama + LiteLLM. It uses:
+## The Problem
 
-- **AST-aware code parsing** — understands real symbols, not just text chunks.
-- **SQLite FTS5 + ChromaDB** — hybrid retrieval (keyword + semantic) over the whole repo.
-- **faster-whisper + ElevenLabs (local TTS)** — voice persona and interaction.
-- **Self-correcting workflows** — generates code, runs lint/tests, iterates.
+Cloud-based coding assistants — Cursor, Copilot, Claude Desktop — have three failure modes that nobody talks about openly:
 
-## The Key Insight
+1. **Your code leaks by design.** Every keystroke, every file, every architectural decision flows through someone else's servers.
+2. **They hallucinate on private APIs.** The model has never seen your internal SDK. It guesses. It guesses wrong. You ship the bug.
+3. **Cost scales with success.** The more useful it is, the more you use it. The more you use it, the more you pay.
 
-Most code agents treat your repo like a bag of tokens. Oblivion treats it like a **graph of symbols** — imports, exports, function calls, types. That's why its context is sharper and its edits are safer.
+I wanted something different. Something that lived in my terminal, understood my codebase semantically, talked back through voice, and didn't require trusting any third party with proprietary code.
 
-## Zero Dependency
+So I built **Oblivion**.
 
-No API keys. No telemetry. No vendor lock-in. Just a Textual TUI that runs on any machine with 16GB+ RAM.
+---
 
-Local-first isn't a nostalgia play — it's the only way to build AI tooling you can actually trust.`,
-    date: "2025-02-10",
-    readTime: "9 min read",
+## Meet M.E.E.R.A.
+
+Oblivion is the shell. **Meera** — Multi-modal Engineering and Reasoning Assistant — is the mind.
+
+She lives inside your codebase, remembers conventions in a project-local \`MEMORY.md\` file, and helps you build software through typed or spoken conversation. She reads your code with AST awareness, edits it with surgical diffs, runs commands with approval gates, and speaks her replies through neural voices.
+
+Install in one line:
+
+    pip install oblivion-agent
+    oblivion
+
+That is it. No Docker. No accounts. No telemetry. No vendor lock-in. MIT licensed and open source.
+
+---
+
+## What Shipped in v2.10.1
+
+After 11 minor releases and 3 PyPI pushes in 24 hours, here is the complete feature set.
+
+### 1. Thirteen LLM Backends With Auto-Fallback
+
+If one provider rate-limits, the next in the chain silently takes over. Failed models get a 5-minute cooldown before being retried. You never see the failure — only the working result.
+
+**The fallback order** (tried sequentially):
+
+| Priority | Model | Provider | Context | Cost |
+|----------|-------|----------|---------|------|
+| 1 | Your \`/model\` selection | — | — | — |
+| 2 | Qwen3 Coder 480B | OpenRouter | 1M | FREE |
+| 3 | GPT-OSS 120B | OpenRouter | 131K | FREE |
+| 4 | Meta Llama 3.3 70B | OpenRouter | 131K | FREE |
+| 5 | Qwen3 Coder 480B | Ollama Cloud | 1M | FREE |
+| 6 | Groq Llama 3.3 70B | Groq | 128K | FREE |
+| 7 | Gemini 2.5 Flash | Google | 1M | FREE |
+| 8 | Cerebras Llama 3.3 70B | Cerebras | 128K | FREE |
+
+Paid options — Claude Sonnet 4, GPT-4o, DeepSeek V3 — plug in via API key for users who want them.
+
+### 2. Hybrid 3-Layer Code Search
+
+When you ask "where is the authentication logic?", most agents do a fuzzy text search and pray. Oblivion runs three searches in parallel:
+
+1. **Exact symbol lookup** — SQLite FTS5, instant, finds functions and classes by name
+2. **Full-text search** — across signatures, docstrings, and code bodies
+3. **Semantic embeddings** — ChromaDB + all-minilm, finds conceptually related code
+
+Results merge, deduplicate, and rank by confidence. Symbol matches always win over semantic guesses. This is why Oblivion edits feel surgical — it actually knows what it is editing, not what it pattern-matches against.
+
+### 3. AST-Aware Code Chunking
+
+Most RAG systems split code into arbitrary 500-token blocks. That is exactly how you get hallucinated function signatures and broken imports.
+
+Oblivion uses:
+
+- **Python \`ast\` module** for \`.py\` files (functions, classes, methods, module headers)
+- **Regex parsers** for JS/TS (functions, arrow functions, classes, React components)
+- **Section-aware splits** for HTML (section/main/header/footer/article blocks)
+- **Selector blocks** for CSS
+- **Heading-based splits** for Markdown
+- **50-line overlapping fallback** for everything else
+
+Each chunk knows its symbol type, name, signature, line range, docstring, and parent class.
+
+### 4. Twenty-Two Tools, Every Destructive One Gated
+
+| Category | Count | Examples |
+|----------|-------|----------|
+| File operations | 6 | read_file, write_file, edit_file, insert_after, list_dir, file_exists |
+| Code navigation | 5 | search_code, find_symbol, list_symbols, find_callers, project_map |
+| Shell and build | 5 | run_bash, start_server, list_servers, stop_server, create_dir |
+| Intelligence | 4 | verify_code, remember, recall, plan_task |
+| Workspace | 2 | new_workspace, grep_files |
+
+Every write, edit, and shell command shows a **unified diff or command preview** and waits for explicit Y/N approval. Truly dangerous commands like \`rm -rf\`, \`git push --force\`, and \`DROP TABLE\` get a hardcoded second confirmation.
+
+### 5. Voice In and Out
+
+Press **Ctrl+T**. Speak. Press Ctrl+T again.
+
+- **Speech-to-text:** Whisper (small model, ~1.5GB, runs 100% locally)
+- **Text-to-speech:** Edge TTS (free Microsoft neural voices) or ElevenLabs (premium)
+- **8 voice personas:** Aria, Jenny, Sonia, Natasha, Emma, Michelle, Guy, Ryan
+- **Indian English accent biased** for coding vocabulary and Indian names
+
+Install with voice support:
+
+    pip install "oblivion-agent[voice]"
+
+### 6. Persistent Project Memory
+
+Meera auto-saves project conventions, architecture decisions, and gotchas to \`MEMORY.md\` in your workspace root. Next session, she reads it first.
+
+Memory is categorized: conventions, architecture, gotchas, preferences, general. Over weeks, she becomes an expert on **your specific codebase** — not the median GitHub repo.
+
+Commands: \`/memory show\`, \`/memory stats\`, \`/memory edit\`, \`/memory clear\`.
+
+### 7. MCP Server for Claude Desktop
+
+Run \`oblivion mcp\` and Claude Desktop, Cursor, and Zed can use Oblivion's 10 read-only tools without launching the TUI:
+
+\`read_file\`, \`list_dir\`, \`grep_files\`, \`file_exists\`, \`search_code\`, \`find_symbol\`, \`list_symbols\`, \`find_callers\`, \`project_map\`, \`recall\`
+
+Write tools are **deliberately not exposed via MCP** — that is the safety boundary.
+
+### 8. Self-Updating
+
+The \`/update\` command checks PyPI for newer versions. \`/update install\` runs \`pip install --upgrade oblivion-agent\` in a background thread without freezing the TUI. The agent can literally update itself.
+
+---
+
+## Architecture
+
+The flow:
+
+    You (voice or text)
+         │
+         ▼
+    Oblivion TUI (Textual)
+         │
+         ▼
+    AgentRuntime (ReAct loop)
+         │
+         ├──► LLM (auto-fallback chain across 13 backends)
+         │
+         └──► 22 tools (with approval gates)
+         │
+         ▼
+    Meera voice ──► Edge TTS / ElevenLabs ──► speaker
+
+The **ReAct loop** in \`agent/runtime.py\`:
+
+1. LLM produces THOUGHT + ACTION (JSON tool call) or FINAL_ANSWER
+2. Parser extracts structured output
+3. Tool executes (with approval if destructive)
+4. Result becomes next OBSERVATION
+5. Loop until FINAL_ANSWER or max iterations (40 default)
+
+### Safety Mechanisms
+
+Four hardcoded guards prevent agent runaway:
+
+| Guard | Trigger | Action |
+|-------|---------|--------|
+| Loop detection | Same tool + args 3x in a row | Force FINAL_ANSWER |
+| Exploration guard | 5 read-only calls in a row | Force an action |
+| Auto-compression | Conversation > 10 messages | Summarize older context |
+| Garbage detection | Model context overflow | Catch and abort before corruption |
+
+---
+
+## What Broke (And What I Learned)
+
+### Whisper + Textual = Process Forking Hell
+
+The error message: \`bad value(s) in fds_to_keep\`.
+
+Root cause: Whisper has to load **before** Textual takes over the terminal, or the subprocess fork dies. The fix was a single config flag — \`OBLIVION_PRELOAD_VOICE=1\` — that preloads the model before the TUI mounts.
+
+Took 6 hours to find. Worth every minute, because now voice "just works" on first install.
+
+### The "Reads, Never Writes" Failure Mode
+
+Early Oblivion would explore the codebase forever and never actually edit anything. It would read 47 files, summarize each one, and then declare it had "gathered enough context" — without writing a single line.
+
+The fix was counterintuitive: after **5 consecutive read-only tool calls, force an action**. Sounds violent. Works perfectly. The agent now has to commit to a hypothesis after enough exploration.
+
+### Loop Detection Saves Your Token Budget
+
+LLMs love to repeat the same wrong tool call when they are confused. They will call \`find_symbol("foo")\` three times in a row, get the same empty result, and call it a fourth time.
+
+Three identical \`tool + args\` invocations now force FINAL_ANSWER. This single guard saved thousands of tokens during testing.
+
+### Packaging Python TUIs Is Genuinely Hard
+
+Things that had to be right before \`pip install oblivion-agent\` worked on a stranger's machine:
+
+- \`pyproject.toml\` extras: \`[voice]\`, \`[premium-voice]\`, \`[all]\`
+- Entry points: \`oblivion = ui.app:main\`, \`oblivion-mcp = mcp_server.main:main\`
+- Centralized path resolution with \`OBLIVION_HOME\` and \`OBLIVION_CACHE\` env overrides (for containers and CI)
+- First-run setup wizard that handles missing API keys gracefully
+- Migration path for users upgrading from older versions
+
+This took longer than building the agent itself.
+
+---
+
+## Why Local-First Wins
+
+Every cloud coding assistant has the three failure modes I opened with. Oblivion fixes all of them:
+
+| Failure mode | Cloud assistants | Oblivion |
+|--------------|------------------|----------|
+| Code leakage | By design | Embeddings live in \`~/.cache/oblivion/chroma\`, never uploaded |
+| Hallucinated private APIs | Always | Reads YOUR indexed symbols, not Stack Overflow |
+| Cost scales with use | Always | Free tiers (Gemini, Groq, OpenRouter) handle 99% of daily work |
+
+Local-first is not nostalgia. It is the only way to build AI tooling you can actually trust with proprietary code.
+
+---
+
+## Comparison
+
+| Feature | Oblivion | Cursor / Copilot | Claude Desktop | ChatGPT |
+|---------|:--------:|:----------------:|:--------------:|:-------:|
+| Runs in terminal | ✅ | ❌ | ❌ | ❌ |
+| Voice input + output | ✅ | ❌ | ❌ | ❌ |
+| Multi-model with auto-fallback | ✅ | Partial | ❌ | ❌ |
+| Symbol-aware code search | ✅ | ✅ | ❌ | ❌ |
+| Semantic codebase search | ✅ | ✅ | ❌ | ❌ |
+| Persistent project memory | ✅ | ❌ | ❌ | ❌ |
+| MCP server (for Claude) | ✅ | ❌ | N/A | ❌ |
+| Self-updating | ✅ | ✅ | ❌ | ❌ |
+| Free to run | ✅ | ❌ | ❌ | ❌ |
+| Open source (MIT) | ✅ | ❌ | ❌ | ❌ |
+| \`pip\`-installable | ✅ | ❌ | ❌ | ❌ |
+
+---
+
+## Try It
+
+    pip install oblivion-agent
+    oblivion
+
+The setup wizard walks you through provider selection and API key paste. Get a **free Gemini key** at [aistudio.google.com/apikey](https://aistudio.google.com/apikey) — 1,500 requests/day, no credit card required.
+
+### Links
+
+- 📦 **PyPI:** [pypi.org/project/oblivion-agent](https://pypi.org/project/oblivion-agent/)
+- 💻 **GitHub:** [github.com/Rohith-s-hub/Oblivion-agent](https://github.com/Rohith-s-hub/Oblivion-agent)
+- 🐛 **Issues:** [github.com/Rohith-s-hub/Oblivion-agent/issues](https://github.com/Rohith-s-hub/Oblivion-agent/issues)
+- 📜 **License:** MIT
+
+---
+
+## What Is Next
+
+Oblivion v3 will focus on three things:
+
+1. **Multi-agent workflows** — Meera delegating subtasks to specialized sub-agents
+2. **Browser tool** — let the agent open a headless Chromium for live web research
+3. **Plugin system** — third-party tools that anyone can ship as \`oblivion-plugin-*\`
+
+If you have ideas, file an issue. If Oblivion helps you ship something cool — star the repo.
+
+Built solo on a Lenovo V15 with 13GB RAM and no GPU, over a series of intense hacking sessions.
+
+> *"Code is conversation. Make it natural."* — Meera`,
+    date: "2025-06-26",
+    readTime: "18 min read",
     category: "AI",
-    tags: ["Local AI", "Coding Agent", "Ollama", "LiteLLM", "AST"],
+    tags: ["Local AI", "Coding Agent", "PyPI", "MCP", "Voice", "RAG"],
     cover: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1600&h=900&fit=crop",
     author: { name: "R. Rohith", avatar: "/images/rohith-avatar.png" },
   },
