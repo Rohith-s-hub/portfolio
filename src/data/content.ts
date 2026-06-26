@@ -33,6 +33,7 @@ export interface Project {
   color: string;
   features: string[];
   link?: string;
+  blogSlug?: string;
 }
 
 export const author = {
@@ -116,6 +117,7 @@ export const projects: Project[] = [
   {
     id: "1",
     title: "CascadeX",
+    blogSlug: "building-cascadex-vulnerability-intelligence",
     description: "Vulnerability Cascade Intelligence Platform — combines CVSS, EPSS, MITRE ATT&CK, and real-time asset context to predict which CVEs attackers will actually exploit against your infrastructure.",
     longDescription: "CascadeX is a full-stack vulnerability intelligence platform that transforms how organizations prioritize cyber risk. Instead of dumping 180,000+ CVEs on security teams, it identifies the exact handful that will be exploited against YOUR specific assets in the next 30 days. Built around a custom Cascade Intelligence Engine that fuses real exploit probability (EPSS from FIRST.org), CVSS severity scoring, MITRE ATT&CK kill chain mapping, and asset-confirmed matching, CascadeX visualizes vulnerabilities as living attack chains — not static lists. The platform features an honest graph engine where every edge carries a confidence level (confirmed/inferred/heuristic), preventing the false certainty that plagues legacy scanners. With JWT-secured RBAC, Google + GitHub OAuth, Docker-containerized deployment, compliance assessment for SOC2/PCI DSS/HIPAA/NIST 800-53, real-time webhook integrations (Slack/Jira/PagerDuty), automated CISA KEV tracking, and a custom 60/40 CVSS-EPSS blended risk model, CascadeX delivers what enterprise security teams have been asking for: a system that admits what it doesn't know, proves what it does, and turns vulnerability management from a list problem into a graph problem. Live in production on Vercel + Railway, fully open-source under MIT license, and currently in the patent filing process.",
     tech: ["Django 6.0", "PostgreSQL", "Redis", "React 18", "TypeScript", "Vite", "Tailwind CSS", "NVD API", "FIRST.org EPSS", "CISA KEV", "MITRE ATT&CK", "Docker", "Nginx", "Gunicorn", "JWT", "OAuth2"],
@@ -143,6 +145,7 @@ export const projects: Project[] = [
   {
     id: "2",
     title: "AI-Powered Hospital Management System",
+    blogSlug: "31b-llm-hospital-management",
     description: "Full-stack hospital management platform with 12+ clinical and financial modules, powered by a 31B-parameter LLM.",
     longDescription: "A full-stack Hospital Management Platform with 12+ clinical and financial modules, supporting role-based workflows for administrators, doctors, receptionists, pharmacists, lab technicians, and billing staff. Designed an enterprise-grade AI analytics layer that converts conversational queries into validated SQL, leveraging Wren AI, Ollama, Redis, and ChromaDB for secure, context-aware reporting and real-time dashboard generation.",
     tech: ["Python", "Frappe", "Vue 3", "MariaDB", "Redis", "Ollama", "ChromaDB", "Wren AI"],
@@ -161,6 +164,7 @@ export const projects: Project[] = [
   {
     id: "3",
     title: "Oblivion",
+    blogSlug: "oblivion-local-ai-coding-agent",
     description: "Terminal AI coding agent with voice, RAG, 13 LLM backends, and a shell-based Meera persona. Open source on GitHub, published on PyPI.",
     longDescription: "Oblivion is a terminal-based AI coding assistant powered by M.E.E.R.A. (Multi-modal Engineering and Reasoning Assistant) — a voice-enabled shell agent that lives inside your codebase, understands it semantically through AST-aware indexing, and helps you build software through natural conversation. Pip-installable from PyPI (`pip install oblivion-agent`), MIT licensed, and 100% self-hosted with zero telemetry. Combines hybrid symbol-aware retrieval (SQLite FTS5 + ChromaDB embeddings), 13 LLM backends across 7 providers with silent auto-fallback, 22 tool-driven actions with diff-approval gates, persistent per-project memory in `MEMORY.md`, voice input via Whisper + voice output via Edge TTS/ElevenLabs, and an MCP server exposing 10 read-only tools to Claude Desktop, Cursor, and Zed. v2.10.1 shipped after 11 minor releases — built solo on a 13GB Lenovo with no GPU.",
     tech: ["Python 3.11+", "Textual TUI", "ChromaDB", "SQLite FTS5", "LiteLLM", "faster-whisper", "Edge TTS", "ElevenLabs", "MCP SDK", "OpenRouter", "Ollama"],

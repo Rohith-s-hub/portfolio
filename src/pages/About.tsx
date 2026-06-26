@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { MapPin, Mail, Award, BookOpen, Briefcase, GraduationCap, CheckCircle2, Code2, UserCircle2, ArrowRight, Sparkles } from "lucide-react";
+import GitHubIcon from "../components/icons/GitHubIcon";
 import { Link } from "react-router-dom";
 import { author, skills, experience, education, certifications, achievements } from "../data/content";
 
@@ -89,7 +90,7 @@ export default function About() {
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white text-sm font-semibold rounded-full hover:bg-slate-800 transition-all"
                 >
-                  <Code2 className="w-4 h-4" />
+                  <GitHubIcon className="w-4 h-4" />
                   GitHub
                 </a>
                 <a

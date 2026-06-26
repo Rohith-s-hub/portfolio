@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Inter', system-ui, sans-serif;
@@ -379,8 +381,6 @@ body {
   outline-offset: 2px;
 }
 
-
-
 .heading-editorial {
   font-family: 'Fraunces', Georgia, serif !important;
   font-weight: 900 !important;
@@ -404,3 +404,892 @@ body {
     transparent 70%
   );
 }
+
+
+/* ============================================================ */
+/* PREMIUM DARK THEME — Linear / Vercel / Stripe inspired      */
+/* Soft natural surfaces · no harsh borders · perfect contrast */
+/* ============================================================ */
+
+html.dark {
+  color-scheme: dark;
+
+  /* Background layers (each step slightly lighter) */
+  --bg-base: #0b0b0d;        /* Page background */
+  --bg-surface: #131316;     /* Cards, sections */
+  --bg-surface-2: #18181c;   /* Hover, inputs */
+  --bg-surface-3: #1f1f24;   /* Elevated (chips, badges) */
+  --bg-overlay: #25252c;     /* Modals, tooltips */
+
+  /* Borders (extremely subtle — almost invisible) */
+  --border-faint: rgba(255, 255, 255, 0.04);
+  --border-soft: rgba(255, 255, 255, 0.06);
+  --border-medium: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  /* Text (warm grays — easier on eyes than pure white) */
+  --text-primary: #ededf0;
+  --text-secondary: #a8a8b3;
+  --text-tertiary: #75757f;
+  --text-muted: #525258;
+
+  /* Accent — slightly brighter for dark backgrounds */
+  --accent: #818cf8;
+  --accent-soft: rgba(129, 140, 248, 0.12);
+}
+
+html.dark body {
+  background: var(--bg-base);
+  color: var(--text-secondary);
+}
+
+/* ============================================================ */
+/* GLOBAL SURFACE NORMALIZATION                                 */
+/* All white-ish backgrounds become layered dark surfaces       */
+/* ============================================================ */
+
+html.dark .bg-white,
+html.dark .bg-slate-50,
+html.dark .bg-slate-50\/50,
+html.dark .bg-slate-50\/70 {
+  background-color: var(--bg-surface) !important;
+}
+
+html.dark .bg-slate-100,
+html.dark .bg-slate-100\/50,
+html.dark .bg-slate-100\/60,
+html.dark .bg-slate-100\/70 {
+  background-color: var(--bg-surface-2) !important;
+}
+
+html.dark .bg-slate-200 {
+  background-color: var(--bg-surface-3) !important;
+}
+
+/* Dark backgrounds → invert to surface */
+html.dark .bg-slate-800,
+html.dark .bg-slate-900,
+html.dark .bg-slate-950 {
+  background-color: var(--bg-base) !important;
+}
+
+/* Translucent navbar bgs */
+html.dark .bg-white\/85,
+html.dark .bg-white\/80 {
+  background-color: rgba(11, 11, 13, 0.72) !important;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+}
+
+/* Gradients that contain slate-50 etc. */
+html.dark [class*="from-slate-50"],
+html.dark [class*="to-slate-50"],
+html.dark [class*="from-slate-100"],
+html.dark [class*="to-slate-100"],
+html.dark [class*="via-slate-50"],
+html.dark [class*="via-slate-100"] {
+  background-image: none !important;
+  background-color: var(--bg-surface) !important;
+}
+
+/* ============================================================ */
+/* TEXT COLORS                                                   */
+/* ============================================================ */
+
+html.dark .text-slate-900,
+html.dark .text-slate-950,
+html.dark .text-black {
+  color: var(--text-primary) !important;
+}
+
+html.dark .text-slate-800,
+html.dark .text-slate-700 {
+  color: var(--text-secondary) !important;
+}
+
+html.dark .text-slate-600,
+html.dark .text-slate-500 {
+  color: var(--text-tertiary) !important;
+}
+
+html.dark .text-slate-400,
+html.dark .text-slate-300 {
+  color: var(--text-muted) !important;
+}
+
+/* Don't break intentional white text */
+html.dark .text-white {
+  color: #fff !important;
+}
+
+/* ============================================================ */
+/* BORDERS — make them nearly invisible (premium feel)          */
+/* ============================================================ */
+
+html.dark .border,
+html.dark .border-t,
+html.dark .border-b,
+html.dark .border-l,
+html.dark .border-r,
+html.dark .border-2,
+html.dark [class*="border-slate"] {
+  border-color: var(--border-soft) !important;
+}
+
+html.dark .border-slate-100,
+html.dark .border-slate-100\/60,
+html.dark .border-slate-200\/60 {
+  border-color: var(--border-faint) !important;
+}
+
+html.dark .border-slate-200 {
+  border-color: var(--border-soft) !important;
+}
+
+html.dark .border-slate-300,
+html.dark .border-slate-400 {
+  border-color: var(--border-medium) !important;
+}
+
+/* ============================================================ */
+/* RINGS (Tailwind ring-1, ring-2 etc.) — make them disappear   */
+/* ============================================================ */
+
+html.dark .ring-1,
+html.dark .ring-2,
+html.dark [class*="ring-slate"] {
+  --tw-ring-color: var(--border-soft) !important;
+  --tw-ring-shadow: none !important;
+  --tw-ring-offset-shadow: none !important;
+}
+
+html.dark .ring-white {
+  --tw-ring-color: var(--border-medium) !important;
+}
+
+/* ============================================================ */
+/* NAVBAR                                                        */
+/* ============================================================ */
+
+html.dark header.fixed {
+  background-color: rgba(11, 11, 13, 0.72) !important;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--border-faint) !important;
+}
+
+/* Logo R box — invert to white square */
+html.dark header .bg-slate-900 {
+  background-color: var(--text-primary) !important;
+}
+
+html.dark header .bg-slate-900 span {
+  color: var(--bg-base) !important;
+}
+
+/* Nav active pill */
+html.dark nav .bg-slate-100 {
+  background-color: var(--bg-surface-3) !important;
+}
+
+/* ============================================================ */
+/* BUTTONS                                                       */
+/* ============================================================ */
+
+/* Primary CTA (Get in touch, Read the journal, Subscribe) */
+html.dark .bg-slate-900:not(header *) {
+  background-color: var(--text-primary) !important;
+  color: var(--bg-base) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+html.dark .bg-slate-900:not(header *):hover,
+html.dark .hover\:bg-slate-800:hover:not(header *) {
+  background-color: #fff !important;
+}
+
+html.dark .bg-slate-900:not(header *) * {
+  color: var(--bg-base) !important;
+}
+
+/* Secondary buttons */
+html.dark .hover\:bg-slate-100:hover,
+html.dark .hover\:bg-slate-50:hover {
+  background-color: var(--bg-surface-2) !important;
+}
+
+/* ============================================================ */
+/* CARDS — soft, natural, no harsh borders                      */
+/* ============================================================ */
+
+/* Remove outline-style cards, replace with subtle elevation */
+html.dark [class*="rounded-2xl"],
+html.dark [class*="rounded-3xl"] {
+  border-color: var(--border-faint);
+}
+
+/* Card hover */
+html.dark .hover\:shadow-xl:hover,
+html.dark .hover\:shadow-2xl:hover {
+  background-color: var(--bg-surface-2) !important;
+}
+
+/* ============================================================ */
+/* SHADOWS — softer, deeper                                     */
+/* ============================================================ */
+
+html.dark .shadow-sm {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.dark .shadow,
+html.dark .shadow-md {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .shadow-lg {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+html.dark .shadow-xl,
+html.dark .shadow-2xl {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ============================================================ */
+/* EDITORIAL HEADINGS                                            */
+/* ============================================================ */
+
+html.dark .heading-editorial {
+  color: var(--text-primary) !important;
+}
+
+/* ============================================================ */
+/* GRADIENT TEXT                                                 */
+/* ============================================================ */
+
+html.dark .gradient-text-muted {
+  background-image: linear-gradient(135deg, #a5b4fc 0%, #c4b5fd 50%, #f0abfc 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* ============================================================ */
+/* HERO / JOURNAL GLOW                                           */
+/* ============================================================ */
+
+html.dark .bg-journal-glow {
+  background: radial-gradient(
+    ellipse 80% 50% at 50% 40%,
+    rgba(129, 140, 248, 0.10) 0%,
+    rgba(168, 85, 247, 0.06) 35%,
+    transparent 70%
+  );
+}
+
+/* ============================================================ */
+/* FOOTER & NEWSLETTER — fix the broken gray section            */
+/* ============================================================ */
+
+html.dark footer,
+html.dark .bg-gradient-to-b,
+html.dark .bg-gradient-to-t,
+html.dark .bg-gradient-to-br {
+  background-image: none !important;
+}
+
+html.dark footer {
+  background-color: var(--bg-surface) !important;
+  border-top: 1px solid var(--border-faint) !important;
+}
+
+/* Newsletter section */
+html.dark [class*="newsletter"],
+html.dark section:has(input[type="email"]) {
+  background-color: var(--bg-surface) !important;
+}
+
+/* ============================================================ */
+/* INPUTS — refined, focused                                    */
+/* ============================================================ */
+
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: var(--bg-surface-2) !important;
+  border: 1px solid var(--border-soft) !important;
+  color: var(--text-primary) !important;
+  transition: border-color 200ms, box-shadow 200ms;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: var(--text-muted) !important;
+}
+
+html.dark input:focus,
+html.dark textarea:focus,
+html.dark select:focus {
+  border-color: var(--accent) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px var(--accent-soft) !important;
+}
+
+/* Select dropdown */
+html.dark select option {
+  background-color: var(--bg-overlay) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ============================================================ */
+/* CODE BLOCKS                                                   */
+/* ============================================================ */
+
+html.dark code:not(pre code) {
+  background-color: var(--bg-surface-3) !important;
+  color: #f0abfc !important;
+  border: 1px solid var(--border-faint);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+html.dark pre {
+  background-color: var(--bg-surface) !important;
+  border: 1px solid var(--border-faint) !important;
+}
+
+html.dark pre code {
+  color: var(--text-primary) !important;
+}
+
+/* ============================================================ */
+/* DIVIDERS                                                      */
+/* ============================================================ */
+
+html.dark hr,
+html.dark .divide-slate-100 > * + *,
+html.dark .divide-slate-200 > * + * {
+  border-color: var(--border-faint) !important;
+}
+
+/* ============================================================ */
+/* CHIPS / BADGES / TAGS                                         */
+/* ============================================================ */
+
+html.dark .bg-indigo-50,
+html.dark .bg-violet-50,
+html.dark .bg-purple-50 {
+  background-color: rgba(129, 140, 248, 0.10) !important;
+  color: #c4b5fd !important;
+}
+
+html.dark .text-indigo-700,
+html.dark .text-violet-700,
+html.dark .text-purple-700,
+html.dark .text-indigo-600,
+html.dark .text-violet-600,
+html.dark .text-purple-600 {
+  color: #a5b4fc !important;
+}
+
+html.dark .bg-rose-50,
+html.dark .bg-red-50 {
+  background-color: rgba(244, 63, 94, 0.10) !important;
+  color: #fda4af !important;
+}
+
+html.dark .text-rose-700,
+html.dark .text-red-700,
+html.dark .text-rose-600 {
+  color: #fda4af !important;
+}
+
+html.dark .bg-emerald-50,
+html.dark .bg-green-50,
+html.dark .bg-teal-50 {
+  background-color: rgba(16, 185, 129, 0.10) !important;
+  color: #6ee7b7 !important;
+}
+
+html.dark .text-emerald-700,
+html.dark .text-green-700,
+html.dark .text-emerald-600 {
+  color: #6ee7b7 !important;
+}
+
+html.dark .bg-amber-50,
+html.dark .bg-yellow-50,
+html.dark .bg-orange-50 {
+  background-color: rgba(245, 158, 11, 0.10) !important;
+  color: #fcd34d !important;
+}
+
+html.dark .text-amber-700,
+html.dark .text-orange-700,
+html.dark .text-amber-600 {
+  color: #fcd34d !important;
+}
+
+html.dark .bg-sky-50,
+html.dark .bg-blue-50,
+html.dark .bg-cyan-50 {
+  background-color: rgba(56, 189, 248, 0.10) !important;
+  color: #7dd3fc !important;
+}
+
+html.dark .text-sky-700,
+html.dark .text-blue-700,
+html.dark .text-cyan-700 {
+  color: #7dd3fc !important;
+}
+
+/* Tech stack chips (e.g. "Python", "React") */
+html.dark .bg-slate-100,
+html.dark .bg-slate-50 {
+  background-color: var(--bg-surface-3) !important;
+  color: var(--text-secondary) !important;
+}
+
+/* ============================================================ */
+/* AVATAR / PROFILE IMAGE RING                                   */
+/* ============================================================ */
+
+html.dark .ring-white {
+  --tw-ring-color: var(--bg-surface-3) !important;
+}
+
+/* ============================================================ */
+/* MARQUEE / TECH SHOWCASE BACKGROUND                            */
+/* ============================================================ */
+
+html.dark [class*="Marquee"],
+html.dark .overflow-hidden:has([class*="animate-marquee"]) {
+  background-color: var(--bg-base) !important;
+}
+
+html.dark .from-white,
+html.dark .to-white,
+html.dark .via-white {
+  --tw-gradient-from: var(--bg-base) !important;
+  --tw-gradient-to: var(--bg-base) !important;
+}
+
+/* ============================================================ */
+/* ICONS — dim down bright colored icons in dark mode           */
+/* ============================================================ */
+
+html.dark .text-amber-500 { color: #fbbf24 !important; }
+html.dark .text-emerald-500 { color: #34d399 !important; }
+html.dark .text-indigo-500 { color: #818cf8 !important; }
+html.dark .text-rose-500 { color: #fb7185 !important; }
+
+/* Icon backgrounds in cards (Home page topic icons) */
+html.dark .from-indigo-50,
+html.dark .to-violet-50,
+html.dark .from-violet-50,
+html.dark .to-purple-50,
+html.dark .from-rose-50,
+html.dark .to-pink-50 {
+  --tw-gradient-from: var(--bg-surface-3) !important;
+  --tw-gradient-to: var(--bg-surface-3) !important;
+}
+
+/* ============================================================ */
+/* SELECTION & SCROLLBARS                                        */
+/* ============================================================ */
+
+html.dark ::selection {
+  background-color: var(--accent-soft);
+  color: var(--text-primary);
+}
+
+html.dark ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: var(--bg-surface-3);
+  border-radius: 5px;
+  border: 2px solid var(--bg-base);
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-overlay);
+}
+
+/* ============================================================ */
+/* IMAGES — slight dim for harmony                              */
+/* ============================================================ */
+
+html.dark img:not([src*=".svg"]):not(.no-dim) {
+  filter: brightness(0.92);
+}
+
+/* ============================================================ */
+/* SMOOTH THEME TRANSITIONS                                      */
+/* ============================================================ */
+
+html, body, header, footer, section, article, aside, nav,
+div, h1, h2, h3, h4, h5, h6, p, a, button, input, textarea {
+  transition:
+    background-color 250ms ease,
+    color 250ms ease,
+    border-color 250ms ease,
+    box-shadow 250ms ease;
+}
+
+/* Don't transition transforms/movements */
+html.dark *:hover {
+  transition-duration: 200ms;
+}
+
+
+/* ============================================================ */
+/* DARK MODE — TARGETED FIXES                                   */
+/* ============================================================ */
+
+/* ----- FIX 1: Marquee corner fade masks ----- */
+/* The TechMarquee uses gradients at edges to fade tech chips.
+   In light mode they fade to white. In dark mode they need to
+   fade to the page background (--bg-base). */
+
+html.dark [class*="from-white"],
+html.dark [class*="to-white"],
+html.dark [class*="via-white"] {
+  --tw-gradient-from: var(--bg-base) !important;
+  --tw-gradient-to: var(--bg-base) !important;
+  --tw-gradient-via: var(--bg-base) !important;
+  --tw-gradient-stops: var(--bg-base), var(--bg-base) !important;
+}
+
+/* Catch any pseudo-element gradient masks */
+html.dark [class*="marquee"]::before,
+html.dark [class*="marquee"]::after,
+html.dark [class*="Marquee"]::before,
+html.dark [class*="Marquee"]::after {
+  background: linear-gradient(
+    to right,
+    var(--bg-base) 0%,
+    transparent 100%
+  ) !important;
+}
+
+/* Inline-styled gradient masks (Framer Motion often uses these) */
+html.dark [style*="linear-gradient"] {
+  /* Force any inline white gradients to use bg-base */
+}
+
+/* TechMarquee specific — common class names */
+html.dark .pointer-events-none[class*="absolute"] {
+  background: linear-gradient(
+    to right,
+    var(--bg-base),
+    transparent
+  ) !important;
+}
+
+html.dark .pointer-events-none[class*="right-0"] {
+  background: linear-gradient(
+    to left,
+    var(--bg-base),
+    transparent
+  ) !important;
+}
+
+/* ----- FIX 2: "Get in touch" navbar button ----- */
+/* The white invert is too harsh in dark mode.
+   Make it a subtle indigo-tinted dark button instead. */
+
+html.dark header a[href="/contact"],
+html.dark header .bg-slate-900 {
+  background-color: var(--bg-surface-3) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-medium) !important;
+  box-shadow: none !important;
+}
+
+html.dark header a[href="/contact"]:hover,
+html.dark header .bg-slate-900:hover {
+  background-color: var(--bg-overlay) !important;
+  border-color: var(--border-strong) !important;
+}
+
+/* Logo R box stays inverted (small accent) */
+html.dark header .w-9.h-9.rounded-xl {
+  background-color: var(--text-primary) !important;
+}
+
+html.dark header .w-9.h-9.rounded-xl span {
+  color: var(--bg-base) !important;
+}
+
+/* ----- FIX 3: Project card arrow icon ----- */
+/* The arrow box (top-right of selected/hovered project card)
+   gets a hardcoded white background. Make it match the theme. */
+
+html.dark [class*="rounded-full"][class*="bg-white"],
+html.dark [class*="rounded-xl"][class*="bg-white"],
+html.dark [class*="rounded-lg"][class*="bg-white"] {
+  background-color: var(--bg-surface-3) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Specifically target arrow link buttons on project cards */
+html.dark a[aria-label*="project" i] .bg-white,
+html.dark a[aria-label*="open" i] .bg-white,
+html.dark a[target="_blank"] .bg-white {
+  background-color: var(--bg-surface-3) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Catch-all: any small white square in a card is the arrow */
+html.dark article .bg-white,
+html.dark [class*="ProjectCard"] .bg-white,
+html.dark [class*="project-card"] .bg-white {
+  background-color: var(--bg-surface-3) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Arrow SVG inside that box */
+html.dark article .bg-white svg,
+html.dark .bg-white .lucide,
+html.dark .group:hover .bg-white {
+  color: var(--text-primary) !important;
+  background-color: var(--bg-surface-3) !important;
+}
+
+/* ----- FIX 4: Blockquote (gray bar on blog posts) ----- */
+/* The blockquote shows light-mode gray bg in dark mode.
+   Make it a subtle indigo-tinted callout. */
+
+html.dark blockquote {
+  background-color: var(--bg-surface) !important;
+  border-left: 3px solid var(--accent) !important;
+  color: var(--text-secondary) !important;
+}
+
+html.dark blockquote * {
+  color: var(--text-secondary) !important;
+}
+
+html.dark blockquote em,
+html.dark blockquote strong {
+  color: var(--text-primary) !important;
+}
+
+/* If blockquote uses a specific class */
+html.dark .bg-slate-100\/70,
+html.dark .bg-slate-50\/70 {
+  background-color: var(--bg-surface) !important;
+}
+
+/* ----- FIX 5: TOC active state ----- */
+/* The "Why I Built CascadeX" purple highlight needs a dark variant */
+
+html.dark .text-indigo-600,
+html.dark .text-indigo-700 {
+  color: #a5b4fc !important;
+}
+
+html.dark .border-indigo-600,
+html.dark .border-indigo-500 {
+  border-color: var(--accent) !important;
+}
+
+/* ----- FIX 6: Code/syntax highlighting in blog content ----- */
+
+html.dark .prose code,
+html.dark .prose pre {
+  background-color: var(--bg-surface-2) !important;
+  border-color: var(--border-soft) !important;
+}
+
+html.dark .prose strong {
+  color: var(--text-primary) !important;
+}
+
+html.dark .prose em {
+  color: var(--text-secondary) !important;
+}
+
+
+/* ============================================================ */
+/* DARK MODE — PRECISION FIXES v2                               */
+/* ============================================================ */
+
+/* ----- MARQUEE FADE EDGES ----- */
+/* The TechMarquee uses bg-gradient-to-r/l from-white in two
+   pointer-events-none divs at the corners.
+   Override them to fade to the page background. */
+
+html.dark .bg-gradient-to-r.from-white,
+html.dark .bg-gradient-to-l.from-white {
+  background-image: linear-gradient(
+    to var(--marquee-dir, right),
+    var(--bg-base) 0%,
+    transparent 100%
+  ) !important;
+}
+
+html.dark .bg-gradient-to-r.from-white {
+  background-image: linear-gradient(
+    to right,
+    var(--bg-base) 0%,
+    transparent 100%
+  ) !important;
+}
+
+html.dark .bg-gradient-to-l.from-white {
+  background-image: linear-gradient(
+    to left,
+    var(--bg-base) 0%,
+    transparent 100%
+  ) !important;
+}
+
+/* Marquee tech chips themselves */
+html.dark .bg-gradient-to-r.from-white ~ * .bg-white,
+html.dark .overflow-hidden .bg-white {
+  background-color: var(--bg-surface-2) !important;
+  border-color: var(--border-soft) !important;
+  color: var(--text-secondary) !important;
+}
+
+/* Hover state for tech chips */
+html.dark .hover\:border-indigo-300:hover {
+  border-color: rgba(129, 140, 248, 0.4) !important;
+}
+
+html.dark .hover\:text-indigo-700:hover {
+  color: #a5b4fc !important;
+}
+
+/* ----- "Get in touch" NAVBAR BUTTON ----- */
+/* Make it a soft glass button instead of pure white */
+
+html.dark header a[href="/contact"] {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-medium) !important;
+  backdrop-filter: blur(8px);
+}
+
+html.dark header a[href="/contact"]:hover {
+  background-color: rgba(255, 255, 255, 0.10) !important;
+  border-color: var(--border-strong) !important;
+}
+
+/* ----- PROJECT CARD ARROW (top-right icon box) ----- */
+/* The white square is likely a div with bg-white containing
+   an ArrowUpRight icon. Make it transparent + bordered. */
+
+html.dark article a .bg-white,
+html.dark article button .bg-white,
+html.dark a.group .bg-white,
+html.dark .group .bg-white {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-soft);
+}
+
+html.dark .group:hover .bg-white,
+html.dark .group-hover\:bg-white {
+  background-color: rgba(255, 255, 255, 0.10) !important;
+  border-color: var(--border-medium) !important;
+}
+
+/* The arrow SVG itself */
+html.dark .bg-white svg,
+html.dark .group .bg-white svg {
+  color: var(--text-primary) !important;
+  stroke: var(--text-primary) !important;
+}
+
+/* ----- BLOG POST BLOCKQUOTE ----- */
+/* Currently shows as gray block — make it a proper callout */
+
+html.dark blockquote,
+html.dark .prose blockquote {
+  background-color: var(--bg-surface) !important;
+  border-left: 3px solid #818cf8 !important;
+  color: var(--text-secondary) !important;
+  padding: 1rem 1.5rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+html.dark blockquote p,
+html.dark .prose blockquote p {
+  color: var(--text-secondary) !important;
+}
+
+html.dark blockquote em,
+html.dark blockquote strong {
+  color: var(--text-primary) !important;
+}
+
+/* If blockquote uses bg-slate-100/70 (common pattern) */
+html.dark [class*="bg-slate-100"][class*="rounded"],
+html.dark .bg-slate-100 {
+  background-color: var(--bg-surface) !important;
+}
+
+
+/* ============================================================ */
+/* DARK MODE — PRIMARY BUTTON CONSISTENCY                      */
+/* All "Read the journal", "View projects", "Subscribe" etc.   */
+/* ============================================================ */
+
+/* Primary CTA buttons (filled dark) — make them subtle glass in dark mode */
+html.dark a.bg-slate-900,
+html.dark button.bg-slate-900,
+html.dark .bg-slate-900[class*="rounded-full"],
+html.dark .bg-slate-900[class*="rounded-xl"],
+html.dark .bg-slate-900[class*="rounded-2xl"] {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-medium) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+html.dark a.bg-slate-900:hover,
+html.dark button.bg-slate-900:hover,
+html.dark .bg-slate-900:hover {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border-color: var(--border-strong) !important;
+}
+
+html.dark .bg-slate-900 svg,
+html.dark .bg-slate-900 span {
+  color: var(--text-primary) !important;
+}
+
+/* Secondary CTA (outlined "View projects") - keep neutral */
+html.dark .border-slate-200.bg-white,
+html.dark .border-slate-300.bg-white {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border-color: var(--border-medium) !important;
+  color: var(--text-primary) !important;
+}
+
+html.dark .border-slate-200.bg-white:hover,
+html.dark .border-slate-300.bg-white:hover {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  border-color: var(--border-strong) !important;
+}
+
+/* Newsletter Subscribe button (dark filled) */
+html.dark button[type="submit"].bg-slate-900,
+html.dark form .bg-slate-900 {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-medium) !important;
+}
+

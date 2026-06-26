@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Code2 } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import CommandPalette from "./CommandPalette";
+import GitHubIcon from "./icons/GitHubIcon";
+import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -36,7 +38,7 @@ export default function Navbar() {
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? "bg-white/85 backdrop-blur-xl border-b border-slate-200/60"
+            ? "bg-white/85 dark:bg-slate-950/85 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60"
             : "bg-transparent"
         }`}
       >
@@ -101,8 +103,10 @@ export default function Navbar() {
                 className="hidden sm:flex items-center justify-center w-10 h-10 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-all"
                 aria-label="GitHub"
               >
-                <Code2 className="w-[18px] h-[18px]" />
+                <GitHubIcon className="w-[18px] h-[18px]" />
               </a>
+
+              <ThemeToggle />
 
               <Link
                 to="/contact"
@@ -139,7 +143,7 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -16, scale: 0.98 }}
               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed top-20 left-4 right-4 z-50 md:hidden bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden"
+              className="fixed top-20 left-4 right-4 z-50 md:hidden bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden"
             >
               <nav className="p-2 space-y-1">
                 {navLinks.map((link, i) => (
