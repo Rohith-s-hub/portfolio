@@ -33,3 +33,4 @@ Thumbs.db
 *.bak
 src/pages.bak/
 tailwind.config.js.bak
+src/data/*.bak*
