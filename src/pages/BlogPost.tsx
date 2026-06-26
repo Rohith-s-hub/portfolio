@@ -63,9 +63,9 @@ export default function BlogPost() {
   if (!post) {
     return (
       <div className="pt-32 pb-20 max-w-3xl mx-auto px-6 text-center">
-        <h1 className="heading-editorial text-4xl font-bold text-slate-900 mb-4">Post not found</h1>
-        <p className="text-slate-600 mb-8">The article you're looking for doesn't exist or has been moved.</p>
-        <button onClick={() => navigate("/blog")} className="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 text-white text-sm font-semibold rounded-full hover:bg-slate-800 transition-all">
+        <h1 className="heading-editorial text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">Post not found</h1>
+        <p className="text-slate-600 dark:text-slate-400 mb-8">The article you're looking for doesn't exist or has been moved.</p>
+        <button onClick={() => navigate("/blog")} className="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 dark:bg-white/10 dark:border dark:border-white/15 text-white text-sm font-semibold rounded-full hover:bg-slate-800 dark:hover:bg-white/15 transition-all">
           <ArrowLeft className="w-4 h-4" />
           Back to blog
         </button>
@@ -95,7 +95,7 @@ export default function BlogPost() {
         components={{
           // ── Headings ─────────────────────────────────────────
           h1: ({ children }) => (
-            <h1 className="heading-editorial text-3xl md:text-4xl font-bold text-slate-900 mt-16 mb-6 scroll-mt-32">
+            <h1 className="heading-editorial text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100 mt-16 mb-6 scroll-mt-32">
               {children}
             </h1>
           ),
@@ -202,7 +202,7 @@ export default function BlogPost() {
 
           // ── Blockquote ───────────────────────────────────────
           blockquote: ({ children }) => (
-            <blockquote className="my-8 pl-6 py-2 border-l-4 border-indigo-500 bg-indigo-50/50 text-slate-700 italic text-lg">
+            <blockquote className="my-8 pl-6 py-3 border-l-4 border-indigo-500 dark:border-indigo-400 bg-indigo-50/50 dark:bg-indigo-500/[0.07] text-slate-700 dark:text-slate-300 italic text-lg rounded-r-lg">
               {children}
             </blockquote>
           ),
