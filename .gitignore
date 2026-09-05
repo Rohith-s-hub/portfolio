@@ -34,3 +34,5 @@ Thumbs.db
 src/pages.bak/
 tailwind.config.js.bak
 src/data/*.bak*
+.vercel
+.env*

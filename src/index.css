@@ -1293,3 +1293,59 @@ html.dark form .bg-slate-900 {
   border: 1px solid var(--border-medium) !important;
 }
 
+
+/* ============================================================ */
+/* COMMAND PALETTE / SEARCH MODAL — fix transparency in dark   */
+/* ============================================================ */
+
+/* The modal panel itself */
+html.dark [role="dialog"],
+html.dark [class*="CommandPalette"],
+html.dark .fixed.inset-0 > div:not([class*="backdrop"]):not([class*="overlay"]) {
+  background-color: var(--bg-overlay) !important;
+}
+
+/* Modal backdrop — make it darker for proper contrast */
+html.dark .fixed.inset-0[class*="bg-"],
+html.dark [class*="backdrop"],
+html.dark [class*="overlay"][class*="fixed"] {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* The actual search panel (the floating box) */
+html.dark .fixed [class*="rounded-2xl"],
+html.dark .fixed [class*="rounded-xl"] {
+  background-color: #18181c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow:
+    0 24px 64px -12px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Search input inside palette */
+html.dark .fixed input[type="text"],
+html.dark .fixed input[type="search"],
+html.dark [class*="CommandPalette"] input {
+  background-color: transparent !important;
+  border: none !important;
+  color: var(--text-primary) !important;
+  box-shadow: none !important;
+}
+
+html.dark .fixed input::placeholder {
+  color: var(--text-tertiary) !important;
+}
+
+/* Hints / shortcuts at bottom of palette */
+html.dark .fixed kbd,
+html.dark kbd {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-secondary) !important;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.7rem;
+}
+
