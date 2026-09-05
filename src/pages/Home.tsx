@@ -10,7 +10,7 @@ import TechMarquee from "../components/TechMarquee";
 import { blogPosts, projects, author, stats } from "../data/content";
 
 const roles = [
-  "AI & Full-Stack Developer",
+  "Rohith R — Creator of Oblivion AI",
   "Cybersecurity Engineer",
   "Enterprise Systems Builder",
 ];
