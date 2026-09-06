@@ -1,5 +1,21 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "rohithblog.vercel.app"
+        }
+      ],
+      "destination": "https://rohith.run.place/:path*",
+      "permanent": true
+    }
   ]
 }
