@@ -37,8 +37,8 @@ export interface Project {
 }
 
 export const author = {
-  name: "R. Rohith",
-  role: "Rohith R — Creator of Oblivion AI",
+  name: "Rohith R",
+  role: "AI Integrated Fullstack Developer",
   bio: "Product developer with experience in full-stack development and hands-on expertise in AI-powered applications, cybersecurity platforms, and enterprise software systems. Passionate about backend engineering, AI systems, and building production-grade infrastructure.",
   location: "Sivakasi, Tamil Nadu",
   email: "lemestarkid@gmail.com",
