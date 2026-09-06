@@ -10,6 +10,9 @@ import BlogPost from "./pages/BlogPost";
 import Projects from "./pages/Projects";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Now from "./pages/Now";
+import Uses from "./pages/Uses";
+import Resume from "./pages/Resume";
 import NotFound from "./pages/NotFound";
 
 function ScrollToTop() {
@@ -43,7 +46,10 @@ function AnimatedRoutes() {
         <Route path="/blog/:slug" element={<PageWrapper><BlogPost /></PageWrapper>} />
         <Route path="/projects" element={<PageWrapper><Projects /></PageWrapper>} />
         <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
+        <Route path="/now" element={<PageWrapper><Now /></PageWrapper>} />
+        <Route path="/uses" element={<PageWrapper><Uses /></PageWrapper>} />
         <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
+        <Route path="/resume" element={<PageWrapper><Resume /></PageWrapper>} />
         <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
       </Routes>
     </AnimatePresence>
@@ -53,7 +59,7 @@ function AnimatedRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="relative min-h-screen flex flex-col bg-white text-slate-900 selection:bg-indigo-500/15 selection:text-indigo-900">
+      <div className="relative min-h-screen flex flex-col bg-[var(--paper)] text-[var(--ink)] selection:bg-[var(--accent-soft)] selection:text-[var(--ink)]">
         <SkipLink />
         <ScrollToTop />
         <Navbar />

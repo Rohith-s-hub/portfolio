@@ -11,6 +11,7 @@ const navLinks = [
   { to: "/blog", label: "Blog" },
   { to: "/projects", label: "Projects" },
   { to: "/about", label: "About" },
+  { to: "/now", label: "Now" },
   { to: "/contact", label: "Contact" },
 ];
 
@@ -20,7 +21,7 @@ export default function Navbar() {
   const location = useLocation();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -36,36 +37,46 @@ export default function Navbar() {
         initial={{ y: -12, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.35 }}
-        className={`site-header ${scrolled ? 'shadow-sm' : ''}`}
+        className={`site-header ${scrolled ? "scrolled" : ""}`}
       >
-        <div className="inner page-width">
-          <Link to="/" className="logo">
+        <div className="section-shell site-header__inner">
+          <Link to="/" className="logo" aria-label="Rohith home">
             <div className="logo-mark">R</div>
-              <div className="hidden sm:block">
-                <div style={{fontWeight:700}}>Rohith</div>
-                <div className="muted" style={{fontSize:12}}>AI · Full-Stack · Security</div>
-              </div>
+            <div className="logo-copy">
+              <div className="logo-name">Rohith</div>
+              <div className="logo-tag">AI • Full-stack • Security</div>
+            </div>
           </Link>
 
-          <nav className="site-nav">
+          <nav className="site-nav" aria-label="Main navigation">
             {navLinks.map((link) => (
-              <NavLink key={link.to} to={link.to} className={({isActive})=> isActive ? 'active' : ''}>
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={({ isActive }) => `site-link ${isActive ? "active" : ""}`}
+              >
                 {link.label}
               </NavLink>
             ))}
-            <a href="https://github.com/Rohith-s-hub" target="_blank" rel="noreferrer" aria-label="GitHub" style={{display:'inline-flex',alignItems:'center'}}>
-              <GitHubIcon className="w-[18px] h-[18px]" />
+            <CommandPalette />
+            <a
+              href="https://github.com/Rohith-s-hub"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub"
+              className="nav-icon"
+            >
+              <GitHubIcon className="h-[18px] w-[18px]" />
             </a>
             <ThemeToggle />
-            <Link to="/contact" className="cta">Get in touch</Link>
-            <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden" aria-label="Toggle menu">
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            <Link to="/resume" className="cta cta--small">Resume</Link>
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="nav-menu-toggle" aria-label="Toggle menu">
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </nav>
         </div>
       </motion.header>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -74,40 +85,35 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileOpen(false)}
-              className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 md:hidden"
+              className="fixed inset-0 z-40 bg-[#0a0a0a]/40 backdrop-blur-sm md:hidden"
             />
             <motion.div
               initial={{ opacity: 0, y: -16, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -16, scale: 0.98 }}
               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed top-20 left-4 right-4 z-50 md:hidden bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden"
+              className="fixed left-4 right-4 top-20 z-50 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--paper)] shadow-[0_30px_70px_rgba(0,0,0,0.18)] md:hidden"
             >
-              <nav className="p-2 space-y-1">
+              <nav className="space-y-1 p-2">
                 {navLinks.map((link, i) => (
                   <NavLink
                     key={link.to}
                     to={link.to}
                     end={link.to === "/"}
                     className={({ isActive }) =>
-                      `flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-all ${
-                        isActive
-                          ? "bg-slate-50 text-slate-900"
-                          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                      `flex items-center justify-between rounded-xl px-4 py-3 text-base font-medium transition-all ${
+                        isActive ? "bg-[var(--panel-alt)] text-[var(--ink)]" : "text-[var(--muted)] hover:bg-[var(--panel-alt)] hover:text-[var(--ink)]"
                       }`
                     }
                   >
                     <span>{link.label}</span>
-                    <span className="text-xs font-mono text-slate-400">0{i + 1}</span>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[var(--muted)]">0{i + 1}</span>
                   </NavLink>
                 ))}
               </nav>
-              <div className="p-3 border-t border-slate-100">
-                <Link
-                  to="/contact"
-                  className="flex items-center justify-center w-full px-5 py-3 text-sm font-semibold text-white bg-slate-900 rounded-xl hover:bg-slate-800 transition-all"
-                >
-                  Get in touch
+              <div className="border-t border-[var(--line)] p-3">
+                <Link to="/resume" className="flex w-full items-center justify-center rounded-xl bg-[var(--ink)] px-5 py-3 text-sm font-semibold text-white">
+                  View resume
                 </Link>
               </div>
             </motion.div>

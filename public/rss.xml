@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Rohith R. — Build Log</title>
+    <link>https://rohithblog.vercel.app/blog</link>
+    <description>Notes on AI-integrated development, secure systems, and product engineering.</description>
+    <language>en-IN</language>
+    <item><title>CascadeX: vulnerability intelligence</title><link>https://rohithblog.vercel.app/blog/building-cascadex-vulnerability-intelligence</link><guid>https://rohithblog.vercel.app/blog/building-cascadex-vulnerability-intelligence</guid><pubDate>Thu, 19 Jun 2026 00:00:00 GMT</pubDate></item>
+    <item><title>Putting a 31B LLM inside a live hospital management system</title><link>https://rohithblog.vercel.app/blog/31b-llm-hospital-management</link><guid>https://rohithblog.vercel.app/blog/31b-llm-hospital-management</guid><pubDate>Thu, 19 Jun 2026 00:00:00 GMT</pubDate></item>
+    <item><title>Oblivion: a production-grade local AI coding agent</title><link>https://rohithblog.vercel.app/blog/oblivion-local-ai-coding-agent</link><guid>https://rohithblog.vercel.app/blog/oblivion-local-ai-coding-agent</guid><pubDate>Thu, 19 Jun 2026 00:00:00 GMT</pubDate></item>
+  </channel>
+</rss>

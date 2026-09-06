@@ -101,12 +101,12 @@ export default function CommandPalette() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="hidden md:flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all"
+        className="command-trigger hidden md:flex items-center gap-2 px-3 py-1.5 text-sm font-medium transition-all"
         aria-label="Search"
       >
         <Search className="w-4 h-4" />
         <span className="text-xs">Search</span>
-        <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono bg-slate-100 text-slate-500 rounded">⌘K</kbd>
+        <kbd className="command-key hidden lg:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono">⌘K</kbd>
       </button>
 
       <AnimatePresence>
@@ -124,10 +124,10 @@ export default function CommandPalette() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.98 }}
               transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed top-24 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-xl z-[70] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden"
+              className="command-dialog fixed top-24 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-xl z-[70] overflow-hidden"
             >
-              <div className="flex items-center gap-3 px-4 border-b border-slate-100">
-                <Search className="w-4 h-4 text-slate-400" />
+              <div className="command-search flex items-center gap-3 px-4">
+                <Search className="w-4 h-4" />
                 <input
                   ref={inputRef}
                   type="text"
@@ -135,11 +135,11 @@ export default function CommandPalette() {
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Search posts, projects, pages..."
-                  className="flex-1 py-4 text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                  className="command-input flex-1 py-4 focus:outline-none"
                 />
                 <button
                   onClick={() => setOpen(false)}
-                  className="flex items-center justify-center w-7 h-7 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-all"
+                  className="command-close flex items-center justify-center w-7 h-7 rounded-full transition-all"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -147,13 +147,13 @@ export default function CommandPalette() {
 
               <div className="max-h-[60vh] overflow-y-auto p-2">
                 {!query && (
-                  <div className="px-3 py-6 text-center text-sm text-slate-500">
+                  <div className="command-empty px-3 py-6 text-center text-sm">
                     Type to search posts, projects, and pages.
                   </div>
                 )}
 
                 {query && allResults.length === 0 && (
-                  <div className="px-3 py-6 text-center text-sm text-slate-500">
+                  <div className="command-empty px-3 py-6 text-center text-sm">
                     No results found for "{query}".
                   </div>
                 )}
@@ -163,34 +163,30 @@ export default function CommandPalette() {
                     key={`${item.type}-${item.title}`}
                     onClick={() => handleSelect(item.to)}
                     onMouseEnter={() => setSelectedIndex(i)}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
-                      i === selectedIndex ? "bg-slate-100" : "hover:bg-slate-50"
+                    className={`command-item w-full flex items-center gap-3 px-3 py-2.5 text-left transition-all ${
+                      i === selectedIndex ? "is-selected" : ""
                     }`}
                   >
-                    <div className={`flex items-center justify-center w-8 h-8 rounded-lg ${
-                      item.type === "post" ? "bg-teal-50 text-teal-600" :
-                      item.type === "project" ? "bg-indigo-50 text-indigo-600" :
-                      "bg-slate-100 text-slate-600"
-                    }`}>
+                    <div className="command-item-icon flex items-center justify-center w-8 h-8">
                       {item.type === "post" ? <FileText className="w-4 h-4" /> :
                        item.type === "project" ? <Folder className="w-4 h-4" /> :
                        <Search className="w-4 h-4" />}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold text-slate-900 truncate">{item.title}</div>
-                      <div className="text-xs text-slate-500">{item.subtitle}</div>
+                      <div className="command-item-title text-sm font-semibold truncate">{item.title}</div>
+                      <div className="command-item-subtitle text-xs">{item.subtitle}</div>
                     </div>
                     <ArrowIcon />
                   </button>
                 ))}
               </div>
 
-              <div className="hidden sm:flex items-center justify-between px-4 py-2.5 border-t border-slate-100 text-[11px] text-slate-400">
+              <div className="command-help hidden sm:flex items-center justify-between px-4 py-2.5 text-[11px]">
                 <div className="flex items-center gap-3">
-                  <span><kbd className="font-mono bg-slate-100 rounded px-1">↑</kbd> <kbd className="font-mono bg-slate-100 rounded px-1">↓</kbd> to navigate</span>
-                  <span><kbd className="font-mono bg-slate-100 rounded px-1">↵</kbd> to select</span>
+                  <span><kbd className="command-key font-mono px-1">↑</kbd> <kbd className="command-key font-mono px-1">↓</kbd> to navigate</span>
+                  <span><kbd className="command-key font-mono px-1">↵</kbd> to select</span>
                 </div>
-                <span><kbd className="font-mono bg-slate-100 rounded px-1">esc</kbd> to close</span>
+                <span><kbd className="command-key font-mono px-1">esc</kbd> to close</span>
               </div>
             </motion.div>
           </>

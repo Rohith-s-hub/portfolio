@@ -1,106 +1,26 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, CheckCircle2, BookOpen, ExternalLink } from "lucide-react";
-import GitHubIcon from "./icons/GitHubIcon";
+import { ArrowUpRight } from "lucide-react";
 import type { Project } from "../data/content";
 
-interface Props {
-  project: Project;
-  index?: number;
-}
+interface Props { project: Project; index?: number; }
 
 export default function ProjectCard({ project, index = 0 }: Props) {
-  const hasBlogPost = Boolean(project.blogSlug);
-
-  const cardContent = (
-    <motion.article
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="group relative flex flex-col h-full pro-card overflow-hidden"
-    >
-      {/* Header */}
-      <div className="card-header">
-        <div className="card-header-top">
-          <div className="category-pill">{project.category}</div>
-          <div className="header-meta">{project.year} · {project.status}</div>
-        </div>
-        <div className="card-header-title">
-          <h3 className="heading-editorial">{project.title}</h3>
-        </div>
-      </div>
-
-      {/* Body */}
-      <div className="flex-1 flex flex-col p-6">
-        <p className="text-sm leading-relaxed mb-5 muted">
-          {project.description}
-        </p>
-
-        <div className="space-y-2.5 mb-6">
-          {project.features.slice(0, 3).map((feature) => (
-            <div key={feature} className="flex items-start gap-2.5 text-sm">
-              <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" />
-              <span className="leading-snug muted">{feature}</span>
-            </div>
-          ))}
-        </div>
-
-        {project.links && (project.links.github || project.links.pypi) && (
-          <div className="flex flex-wrap gap-2 mb-5">
-            {project.links.github && (
-              <a
-                  href={project.links.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="chip"
-                >
-                  <GitHubIcon className="w-3.5 h-3.5" />
-                  GitHub
-                </a>
-            )}
-            {project.links.pypi && (
-              <a
-                href={project.links.pypi}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="chip"
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-                PyPI
-              </a>
-            )}
-          </div>
-        )}
-
-        <div className="mt-auto pt-5 border-t border-slate-100 dark:border-white/[0.06]">
-          <div className="flex flex-wrap gap-2 mb-4 tech-list">
-            {project.tech.slice(0, 6).map((t) => (
-              <span key={t} className="tech-chip">{t}</span>
-            ))}
-          </div>
-
-          {hasBlogPost && (
-            <div className="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-700 dark:text-indigo-300">
-              <BookOpen className="w-4 h-4" />
-              Read the full essay
-              <span className="transition-transform group-hover:translate-x-0.5">→</span>
-            </div>
-          )}
-        </div>
-      </div>
-    </motion.article>
-  );
-
-  if (hasBlogPost && project.blogSlug) {
-    return (
-      <Link to={`/blog/${project.blogSlug}`} className="block h-full">
-        {cardContent}
-      </Link>
-    );
-  }
-
-  return cardContent;
+  const destination = project.blogSlug ? `/blog/${project.blogSlug}` : project.link || project.links?.github;
+  const content = <>
+    <div className="project-card__visual" aria-hidden="true">
+      <div className="terminal-bar"><i /><i /><i /><span>{project.title.toLowerCase()}.app</span></div>
+      <div className="terminal-lines"><b>01</b><span>{project.category}</span><b>02</b><span>STATUS: {project.status}</span><b>03</b><span>BUILD / {project.year}</span></div>
+      <strong>{String(index + 1).padStart(2, "0")}</strong>
+    </div>
+    <div className="project-card__content">
+      <div className="meta-row"><span className="label">{project.category}</span><span>{project.year}</span></div>
+      <h3>{project.title}</h3>
+      <p>{project.description}</p>
+      <div className="tech-row">{project.tech.slice(0, 4).map((tech) => <span key={tech}>{tech}</span>)}</div>
+      <div className="card-bottom"><span className="project-status">{project.status}</span><span className="arrow-link"><ArrowUpRight size={18} /></span></div>
+    </div>
+  </>;
+  if (!destination) return <article className="editorial-card project-card">{content}</article>;
+  const external = destination.startsWith("http");
+  return external ? <a className="editorial-card project-card" href={destination} target="_blank" rel="noreferrer">{content}</a> : <Link className="editorial-card project-card" to={destination}>{content}</Link>;
 }
