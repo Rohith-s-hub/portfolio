@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+User-agent: Google-Favicon
+Allow: /
+
 Sitemap: https://rohithblog.vercel.app/sitemap.xml
