@@ -9,66 +9,39 @@ interface Props {
   variant?: "default" | "featured" | "compact";
 }
 
-const categoryStyles: Record<string, string> = {
-  AI: "bg-teal-50 text-teal-700 ring-teal-500/10",
-  Cybersecurity: "bg-rose-50 text-rose-700 ring-rose-500/10",
-  Engineering: "bg-amber-50 text-amber-700 ring-amber-500/10",
-};
-
 export default function BlogCard({ post, index = 0, variant = "default" }: Props) {
-  const categoryClass = categoryStyles[post.category] || "bg-indigo-50 text-indigo-700 ring-indigo-500/10";
-
+  // Featured: larger card with image left on wide screens; compact: small list row
   if (variant === "featured") {
     return (
       <motion.article
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.7, delay: index * 0.1 }}
-        className="group grid lg:grid-cols-2 gap-0 bg-white rounded-3xl border border-slate-200/80 overflow-hidden card-hover"
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: index * 0.08 }}
+        className="card journal-feature"
       >
-        <Link to={`/blog/${post.slug}`} className="relative block overflow-hidden aspect-[4/3] lg:aspect-auto">
-          <img
-            src={post.cover}
-            alt={post.title}
-            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-            loading="lazy"
-          />
-        </Link>
-
-        <div className="p-8 lg:p-10 flex flex-col justify-center">
-          <div className="flex items-center gap-3 text-xs text-slate-500 mb-5">
-            <span className={`pill pill-sm ring-1 ${categoryClass}`}>
-              {post.category}
-            </span>
-            <span className="font-mono text-slate-400">·</span>
-            <span className="font-mono">{new Date(post.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
-            <span className="font-mono text-slate-400">·</span>
-            <span className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              {post.readTime}
-            </span>
-          </div>
-
-          <Link to={`/blog/${post.slug}`}>
-            <h3 className="heading-editorial text-2xl lg:text-3xl font-bold text-slate-900 mb-4 group-hover:text-indigo-700 transition-colors duration-200">
-              {post.title}
-            </h3>
+        <div style={{display: 'flex', gap: 20, alignItems: 'center'}}>
+          <Link to={`/blog/${post.slug}`} className="shrink-0" aria-label={post.title}>
+            <img src={post.cover} alt={post.title} style={{width: 420, height: 260, objectFit: 'cover', borderRadius: 8}} loading="lazy" />
           </Link>
-
-          <p className="text-slate-600 leading-relaxed mb-6 line-clamp-3">
-            {post.excerpt}
-          </p>
-
-          <div className="flex items-center justify-between mt-auto pt-6 border-t border-slate-100">
-            <div className="flex items-center gap-3">
-              <img src={post.author.avatar} alt={post.author.name} className="w-9 h-9 rounded-full object-cover" />
-              <span className="text-sm font-medium text-slate-900">{post.author.name}</span>
+          <div>
+            <div className="meta">
+              <span className="pill">{post.category}</span>
+              <span>·</span>
+              <time className="muted">{new Date(post.date).toLocaleDateString()}</time>
+              <span>·</span>
+              <div style={{display:'inline-flex', alignItems:'center', gap:6}} className="muted"><Clock className="" />{post.readTime}</div>
             </div>
-            <Link to={`/blog/${post.slug}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-700 hover:text-indigo-800 transition-colors group/link">
-              Read
-              <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-0.5" />
+
+            <Link to={`/blog/${post.slug}`}>
+              <h3 className="title">{post.title}</h3>
             </Link>
+
+            <p className="excerpt line-clamp-3">{post.excerpt}</p>
+
+            <div>
+              <Link to={`/blog/${post.slug}`} className="read">Read →</Link>
+            </div>
           </div>
         </div>
       </motion.article>
@@ -78,75 +51,44 @@ export default function BlogCard({ post, index = 0, variant = "default" }: Props
   if (variant === "compact") {
     return (
       <motion.article
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: index * 0.05 }}
-        className="group flex gap-4 py-4 border-b border-slate-100 last:border-0 cursor-pointer"
+        transition={{ duration: 0.45, delay: index * 0.04 }}
+        className="card compact"
       >
-        <Link to={`/blog/${post.slug}`} className="shrink-0 w-20 h-20 rounded-xl overflow-hidden bg-slate-100">
-          <img src={post.cover} alt={post.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+        <Link to={`/blog/${post.slug}`}>
+          <img src={post.cover} alt={post.title} />
         </Link>
-        <div className="flex-1 min-w-0 py-0.5">
-          <span className={`pill pill-sm ring-1 mb-2 ${categoryClass}`}>{post.category}</span>
-          <Link to={`/blog/${post.slug}`} className="block font-display font-semibold text-slate-900 text-[15px] leading-snug line-clamp-2 group-hover:text-indigo-700 transition-colors mt-2">
-            {post.title}
+        <div>
+          <div className="meta"><span className="pill">{post.category}</span></div>
+          <Link to={`/blog/${post.slug}`}>
+            <h4 style={{margin:'6px 0',fontWeight:700}}>{post.title}</h4>
           </Link>
-          <div className="text-xs font-mono text-slate-400 mt-2">
-            {new Date(post.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-          </div>
+          <div className="muted" style={{fontSize:13}}>{new Date(post.date).toLocaleDateString()}</div>
         </div>
       </motion.article>
     );
   }
 
-  // Default card
   return (
     <motion.article
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6, delay: index * 0.08 }}
-      className="group flex flex-col bg-white rounded-3xl border border-slate-200/80 overflow-hidden card-hover"
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.06 }}
+      className="card"
     >
-      <Link to={`/blog/${post.slug}`} className="relative block overflow-hidden aspect-[16/10]">
-        <img
-          src={post.cover}
-          alt={post.title}
-          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-          loading="lazy"
-        />
+      <Link to={`/blog/${post.slug}`}>
+        <h3 className="title">{post.title}</h3>
       </Link>
-
-      <div className="flex-1 flex flex-col p-6">
-        <div className="flex items-center gap-3 text-xs text-slate-500 mb-4">
-          <span className={`pill pill-sm ring-1 ${categoryClass}`}>
-            {post.category}
-          </span>
-          <span className="font-mono text-slate-400">·</span>
-          <span className="font-mono">{new Date(post.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
-        </div>
-
-        <Link to={`/blog/${post.slug}`}>
-          <h3 className="heading-editorial text-xl font-bold text-slate-900 leading-snug mb-3 group-hover:text-indigo-700 transition-colors duration-200 line-clamp-2">
-            {post.title}
-          </h3>
-        </Link>
-
-        <p className="text-slate-600 text-sm leading-relaxed mb-5 line-clamp-3 flex-1">
-          {post.excerpt}
-        </p>
-
-        <div className="flex items-center justify-between pt-5 border-t border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <img src={post.author.avatar} alt={post.author.name} className="w-7 h-7 rounded-full object-cover" />
-            <span className="text-xs font-medium text-slate-700">{post.author.name}</span>
-          </div>
-          <div className="flex items-center gap-1 text-xs text-slate-500">
-            <Clock className="w-3 h-3" />
-            {post.readTime}
-          </div>
-        </div>
+      <div className="meta" style={{marginTop:8}}>
+        <span className="pill">{post.category}</span>
+        <span style={{marginLeft:8}} className="muted">{new Date(post.date).toLocaleDateString()}</span>
+      </div>
+      <p className="excerpt line-clamp-3" style={{marginTop:12}}>{post.excerpt}</p>
+      <div>
+        <Link to={`/blog/${post.slug}`} className="read">Read →</Link>
       </div>
     </motion.article>
   );

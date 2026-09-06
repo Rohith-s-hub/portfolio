@@ -39,73 +39,45 @@ export default function Blog() {
   };
 
   return (
-    <div className="relative pt-32 pb-20">
+    <div>
       {/* Hero */}
-      <section className="relative pb-14">
-        <div className="absolute inset-0 grid-pattern opacity-30 pointer-events-none" />
-
-        <div className="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 bg-slate-100 rounded-full text-[11px] font-semibold text-slate-600 uppercase tracking-wider mb-6"
-          >
+      <section className="hero">
+        <div className="container text-center">
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="eyebrow">
             {blogPosts.length} articles · updated regularly
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="heading-editorial text-5xl md:text-7xl font-bold text-slate-900 mb-5"
-          >
-            The <span className="gradient-text-muted">Journal.</span>
+          <motion.h1 initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
+            The Journal.
           </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-base md:text-lg text-slate-600 max-w-xl mx-auto mb-10"
-          >
+          <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.05 }}>
             Essays on AI, full-stack engineering, cybersecurity platforms, and the craft of building production-grade software.
           </motion.p>
 
           {/* Search */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="relative max-w-lg mx-auto"
-          >
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search essays, tags, topics..."
-              className="w-full pl-11 pr-10 py-3.5 bg-white border border-slate-200 rounded-2xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/15 focus:border-indigo-300 transition-all"
-            />
-            {query && (
-              <button
-                onClick={() => setQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-all"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.08 }} className="" style={{maxWidth:520, margin:'18px auto'}}>
+            <div style={{position:'relative'}}>
+              <Search className="muted" style={{position:'absolute',left:12,top:'50%',transform:'translateY(-50%)'}} />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search essays, tags, topics..."
+                style={{ width: '100%', padding: '12px 14px 12px 40px', borderRadius: 12, border: '1px solid var(--border-soft)' }}
+              />
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* Filters */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-8 mb-10">
+      <section className="page-width" style={{marginTop:28, marginBottom:28}}>
         <div className="flex items-center gap-2 mb-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
           <Filter className="w-3.5 h-3.5" />
           Categories
         </div>
-        <div className="flex flex-wrap gap-2.5">
+        <div style={{display:'flex',flexWrap:'wrap',gap:10}}>
           {categories.map((cat) => {
             const isActive = activeCategory === cat.name;
             const style = categoryStyles[cat.name] || categoryStyles.All;
@@ -113,11 +85,7 @@ export default function Blog() {
               <button
                 key={cat.name}
                 onClick={() => setActiveCategory(cat.name)}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
-                  isActive
-                    ? `${style.bg} ${style.text} ${style.ring ? `ring-1 ${style.ring}` : ""}`
-                    : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
-                }`}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${ isActive ? 'active' : ''}`}
               >
                 {cat.name}
                 <span className={`text-xs font-mono ${isActive ? "opacity-70" : "text-slate-400"}`}>
@@ -155,51 +123,25 @@ export default function Blog() {
         </div>
       </section>
 
-      {/* Featured + Sidebar (only when no filters) */}
-      {!hasFilters && (
-        <section className="max-w-7xl mx-auto px-6 lg:px-8 mb-14">
-          <BlogCard post={featured} variant="featured" index={0} />
-        </section>
-      )}
-
-      {/* Grid */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-100">
-          <h2 className="font-display text-lg font-semibold text-slate-900">
-            {hasFilters
-              ? `${filtered.length} result${filtered.length !== 1 ? "s" : ""}`
-              : "All essays"}
-          </h2>
-          <div className="flex items-center gap-2 text-xs text-slate-500">
-            <Clock className="w-3.5 h-3.5" />
-            Sorted by date
-          </div>
+      {/* Featured + grid */}
+      <section className="page-width" style={{marginBottom:40}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:18,borderBottom:'1px solid #eef2f7',paddingBottom:12}}>
+          <h2 style={{fontWeight:700}}>{hasFilters ? `${filtered.length} result${filtered.length !== 1 ? 's' : ''}` : 'All essays'}</h2>
+          <div className="muted" style={{fontSize:13,display:'flex',alignItems:'center',gap:8}}><Clock />Sorted by date</div>
         </div>
 
         {filtered.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="py-20 text-center bg-slate-50/50 border border-slate-100 rounded-3xl"
-          >
-            <div className="text-5xl mb-4">🔍</div>
-            <h3 className="heading-editorial text-2xl font-bold text-slate-900 mb-2">No posts found</h3>
-            <p className="text-slate-600 mb-6">Try a different search term or category.</p>
-            <button
-              onClick={() => {
-                setQuery("");
-                setActiveCategory("All");
-                setActiveTag(null);
-              }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white text-sm font-semibold rounded-full hover:bg-slate-800 transition-all"
-            >
-              Reset filters
-              <ArrowRight className="w-4 h-4" />
-            </button>
+          <motion.div initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} className="card" style={{textAlign:'center',padding:40}}>
+            <div style={{fontSize:40,marginBottom:8}}>🔍</div>
+            <h3 style={{fontWeight:800,fontSize:20,marginBottom:8}}>No posts found</h3>
+            <p className="muted">Try a different search term or category.</p>
+            <div style={{marginTop:16}}>
+              <button onClick={()=>{setQuery('');setActiveCategory('All');setActiveTag(null)}} className="cta">Reset filters</button>
+            </div>
           </motion.div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(hasFilters ? filtered : filtered.filter((p) => p.id !== featured.id)).map((post, i) => (
+          <div className="posts-grid">
+            {(hasFilters ? filtered : filtered.filter((p)=>p.id !== featured.id)).map((post,i)=> (
               <BlogCard key={post.id} post={post} index={i} />
             ))}
           </div>

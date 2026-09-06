@@ -33,97 +33,35 @@ export default function Navbar() {
   return (
     <>
       <motion.header
-        initial={{ y: -24, opacity: 0 }}
+        initial={{ y: -12, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? "bg-white/85 dark:bg-slate-950/85 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60"
-            : "bg-transparent"
-        }`}
+        transition={{ duration: 0.35 }}
+        className={`site-header ${scrolled ? 'shadow-sm' : ''}`}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="relative w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <span className="text-white font-bold text-sm font-display">R</span>
-              </div>
+        <div className="inner page-width">
+          <Link to="/" className="logo">
+            <div className="logo-mark">R</div>
               <div className="hidden sm:block">
-                <div className="font-display font-semibold text-[15px] text-slate-900 leading-none">
-                  Rohith
-                </div>
-                <div className="text-[11px] text-slate-500 mt-1 font-medium tracking-wide">
-                  AI · Full-Stack · Security
-                </div>
+                <div style={{fontWeight:700}}>Rohith</div>
+                <div className="muted" style={{fontSize:12}}>AI · Full-Stack · Security</div>
               </div>
-            </Link>
+          </Link>
 
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <NavLink
-                  key={link.to}
-                  to={link.to}
-                  end={link.to === "/"}
-                  className={({ isActive }) =>
-                    `relative px-4 py-2 text-[15px] font-medium rounded-full transition-all duration-200 ${
-                      isActive
-                        ? "text-slate-900"
-                        : "text-slate-500 hover:text-slate-900"
-                    }`
-                  }
-                >
-                  {({ isActive }) => (
-                    <>
-                      {link.label}
-                      {isActive && (
-                        <motion.span
-                          layoutId="nav-pill"
-                          className="absolute inset-0 bg-slate-100 rounded-full -z-10"
-                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                        />
-                      )}
-                    </>
-                  )}
-                </NavLink>
-              ))}
-            </nav>
-
-            {/* Right side */}
-            <div className="flex items-center gap-2">
-              <div className="hidden md:block">
-                <CommandPalette />
-              </div>
-
-              <a
-                href="https://github.com/Rohith-s-hub"
-                target="_blank"
-                rel="noreferrer"
-                className="hidden sm:flex items-center justify-center w-10 h-10 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-all"
-                aria-label="GitHub"
-              >
-                <GitHubIcon className="w-[18px] h-[18px]" />
-              </a>
-
-              <ThemeToggle />
-
-              <Link
-                to="/contact"
-                className="hidden md:inline-flex items-center justify-center px-5 h-10 text-sm font-semibold text-white bg-slate-900 rounded-full hover:bg-slate-800 transition-all"
-              >
-                Get in touch
-              </Link>
-
-              <button
-                onClick={() => setMobileOpen(!mobileOpen)}
-                className="md:hidden flex items-center justify-center w-10 h-10 text-slate-600 hover:bg-slate-100 rounded-full transition-all"
-                aria-label="Toggle menu"
-              >
-                {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
-            </div>
-          </div>
+          <nav className="site-nav">
+            {navLinks.map((link) => (
+              <NavLink key={link.to} to={link.to} className={({isActive})=> isActive ? 'active' : ''}>
+                {link.label}
+              </NavLink>
+            ))}
+            <a href="https://github.com/Rohith-s-hub" target="_blank" rel="noreferrer" aria-label="GitHub" style={{display:'inline-flex',alignItems:'center'}}>
+              <GitHubIcon className="w-[18px] h-[18px]" />
+            </a>
+            <ThemeToggle />
+            <Link to="/contact" className="cta">Get in touch</Link>
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden" aria-label="Toggle menu">
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </nav>
         </div>
       </motion.header>
 
